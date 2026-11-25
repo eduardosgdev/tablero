@@ -1,16 +1,18 @@
 
 <script>
+// @ts-nocheck
+
     const personajes = [
         { nombre: "plimplim", color: "bg-sky-300" },
         { nombre: "cangrejo", color: "bg-orange-300" },
         { nombre: "nesho", color: "bg-pink-300" },
-        { nombre: "pam", color: "bg-yellow-300" },
+        { nombre: "pam", color: "bg-green-500" },
         { nombre: "wichiwi", color: "bg-purple-300" },
         { nombre: "acuarela", color: "bg-green-300" },
         { nombre: "meili", color: "bg-red-600" },
         { nombre: "hoggie", color: "bg-blue-600" },
     ];
-
+    import { onMount } from "svelte";
     let personajesMezclados = $state([...personajes]);
 
     let mostrarModal = $state(false);
@@ -21,6 +23,27 @@
 
     let resultado = $state("");
     let aciertos = $state(0);
+
+    let audioAplausos;
+let audioVitores;
+
+function reproducirCelebracion() {
+    if (audioAplausos ) {
+        audioAplausos.currentTime = 0;
+        
+
+        audioAplausos.volume = 0.8;
+        
+
+        audioAplausos.play();
+        setTimeout(() => {
+            audioAplausos.pause();
+            audioAplausos.currentTime = 0;
+            
+        }, 3000);
+        
+    }
+}
 
     // Seleccionar siguiente personaje
     function siguientePersonaje() {
@@ -38,28 +61,31 @@
 
     // Comprobar selección
     function seleccionarPersonaje(personaje) {
-        if (mostrarModal) return;
+    if (mostrarModal) return;
 
-        if (personaje.nombre === personajeObjetivo.nombre) {
-            resultado = "correcto";
-            aciertos++;
-            mostrarModal = true;
+    if (personaje.nombre === personajeObjetivo.nombre) {
+        resultado = "correcto";
+        aciertos++;
+        mostrarModal = true;
 
-            setTimeout(() => {
-                mostrarModal = false;
-                siguientePersonaje();
-            }, 1800);
+        reproducirCelebracion();
 
-        } else {
-            resultado = "incorrecto";
-            mostrarModal = true;
+        setTimeout(() => {
+            mostrarModal = false;
+            siguientePersonaje();
+            escucharPregunta();
+        }, 3500);
 
-            setTimeout(() => {
-                mostrarModal = false;
-                resultado = "";
-            }, 1300);
-        }
+    } else {
+        resultado = "incorrecto";
+        mostrarModal = true;
+
+        setTimeout(() => {
+            mostrarModal = false;
+            resultado = "";
+        }, 1300);
     }
+}
 
     // Reproducir pregunta
     function escucharPregunta() {
@@ -67,31 +93,34 @@
 
     window.speechSynthesis.cancel();
 
-    const pregunta = new SpeechSynthesisUtterance(
-        `¿Dónde está ${personajeObjetivo.nombre}?`
-    );
+    setTimeout(() => {
+        const pregunta = new SpeechSynthesisUtterance(
+            `¿Dónde está ${personajeObjetivo.nombre}?`
+        );
 
-    // Voz en español
-    pregunta.lang = "es-ES";
+        // Voz en español
+        pregunta.lang = "es-ES";
 
-    // Tono más agudo y alegre
-    pregunta.rate = 0.95;
-    pregunta.pitch = 1.4;
-    pregunta.volume = 1;
+        // Tono alegre y agudo
+        pregunta.rate = 0.67;
+        pregunta.pitch = 6.5;
+        pregunta.volume = 1;
 
-    // Buscar una voz femenina en español
-    const voces = window.speechSynthesis.getVoices();
+        // Buscar voz femenina
+        const voces = window.speechSynthesis.getVoices();
 
-    const vozFemenina = voces.find(voz =>
-        voz.lang.toLowerCase().startsWith("es") &&
-        /female|femenina|helena|laura|monica|lucia/i.test(voz.name)
-    );
+        const vozFemenina = voces.find(voz =>
+            voz.lang.toLowerCase().startsWith("es") &&
+            /female|femenina|helena|laura|monica|lucia/i.test(voz.name)
+        );
 
-    if (vozFemenina) {
-        pregunta.voice = vozFemenina;
-    }
+        if (vozFemenina) {
+            pregunta.voice = vozFemenina;
+        }
 
-    window.speechSynthesis.speak(pregunta);
+        window.speechSynthesis.speak(pregunta);
+
+    }, 1200);
 }
 
     function mezclarPersonajes() {
@@ -99,77 +128,77 @@
         () => Math.random() - 0.5
     );
 }
+    onMount(() => {
+        const temporizador = setTimeout(() => {
+            escucharPregunta();
+        }, 700);
+
+        return () => clearTimeout(temporizador);
+    });
 </script>
 
 <svelte:head>
     <title>Encuentra los personajes | Plim Plim</title>
 </svelte:head>
 
-<main class="min-h-screen bg-gradient-to-b from-sky-100 via-white to-purple-50 p-4 sm:p-8">
-
-    <section class="mx-auto max-w-6xl">
+<main class="h-[610px] w-full box-border overflow-hidden bg-gradient-to-b from-sky-200 via-white to-blue-300 p-3">
+    <section class="mx-auto flex h-full max-w-5xl flex-col gap-2">
 
         <!-- PREGUNTA -->
-        <div class="mb-8 rounded-3xl bg-white p-6 sm:p-10 text-center shadow-lg">
+        <div class="shrink-0 rounded-3xl bg-gray-200 p-3 text-center shadow-lg">
 
-            <p class="mb-3 text-sm font-bold uppercase tracking-widest text-sky-500">
+            <p class="mb-1 text-xs font-bold uppercase tracking-widest text-sky-500">
                 ¡Vamos a jugar!
             </p>
 
-            <h1 class="text-3xl sm:text-5xl font-black text-sky-800">
+            <h1 class="text-2xl sm:text-3xl font-black text-sky-800">
                 ¿Dónde está
                 <span class="text-orange-500 capitalize">
                     {personajeObjetivo.nombre}
-                </span>?
+                </span> ?
             </h1>
 
             <button
                 onclick={escucharPregunta}
-                class="mt-5 rounded-full bg-sky-500 px-7 py-3
-                font-bold text-white shadow-md transition
+                class="mt-2 rounded-full bg-sky-500 px-6 py-2
+                text-xl font-bold text-white shadow-md transition
                 hover:bg-sky-600 active:scale-95"
             >
-                🔊 Escuchar pregunta
+                🔊 
             </button>
-
-            <div class="mt-5 text-sm font-bold text-gray-400">
-                ⭐ Aciertos: {aciertos}
-            </div>
-
         </div>
 
         <!-- GRID DE PERSONAJES -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div class="grid flex-1  min-h-0 grid-cols-3 grid-rows-2 gap-2">
 
             {#each personajesMezclados as personaje (personaje.nombre)}
 
                 <button
                     onclick={() => seleccionarPersonaje(personaje)}
                     disabled={mostrarModal}
-                    class="group flex min-h-44 flex-col items-center
-                    justify-center overflow-hidden rounded-3xl
-                    border-4 border-white p-3 shadow-lg
+                    class="group flex min-h-0 min-w-0 flex-col items-center
+                    justify-center overflow-hidden rounded-2xl
+                    border-4 border-white p-2 shadow-lg
                     transition-all duration-300
-                    hover:-translate-y-2 hover:scale-[1.02]
-                    hover:shadow-xl active:scale-95
+                    hover:scale-[1.02] hover:shadow-xl active:scale-95
                     disabled:cursor-default
                     {personaje.color}"
                 >
 
-                    <div class="flex h-28 w-full items-center justify-center sm:h-40">
+                        <div class="flex  h-[90px] w-[90px] items-center justify-center">
 
-                        <img
-                            src={`/img/plim/${personaje.nombre}.png`}
-                            alt={personaje.nombre}
-                            class="h-full w-full object-contain
-                            transition-transform duration-300
-                            group-hover:scale-110"
-                        />
+                            <img
+                                src={`/img/plim/${personaje.nombre}.png`}
+                                alt={personaje.nombre}
+                                class="max-h-full max-w-full object-contain
+                                transition-transform duration-300
+                                group-hover:scale-110"
+                            />
 
-                    </div>
+                        </div>
 
-                    <span class="mt-3 rounded-full bg-white/90 px-4 py-1
-                        text-sm font-black capitalize text-gray-800 shadow-sm">
+                    <span class="mt-1 shrink-0 rounded-full bg-white/90 px-3 py-1
+                        text-xs font-black capitalize text-gray-800 shadow-sm">
                         {personaje.nombre}
                     </span>
 
@@ -244,6 +273,12 @@
         </div>
 
     {/if}
-
+    <audio
+    bind:this={audioAplausos}
+    src="/audio/aplauso.mp3"
+    preload="auto"
+></audio>
 </main>
+
+
 
