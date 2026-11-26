@@ -20,35 +20,6 @@
 
     <section class="mx-auto flex max-w-7xl flex-col gap-4">
 
-        <!-- CABECERA -->
-
-        <header class="relative z-50 flex items-center justify-between rounded-3xl bg-white p-4 shadow-md">
-
-            <div>
-                <h1 class="text-2xl font-black text-pink-500 sm:text-4xl">
-                    ¡Molang y Piu Piu!
-                </h1>
-
-                <p class="font-bold text-gray-500">
-                    ¡Ayuda a Piu Piu a saltar!
-                </p>
-            </div>
-
-            <div class="rounded-2xl bg-yellow-100 px-4 py-2 text-center">
-                <span class="text-xs font-black text-yellow-700">
-                    SALTOS
-                </span>
-
-                <p class="text-3xl font-black text-yellow-600">
-                    {saltos}
-                </p>
-            </div>
-
-        </header>
-
-
-        <!-- ESCENARIO -->
-
         <div class="escenario relative h-[430px] w-full overflow-hidden rounded-3xl border-4 border-white shadow-xl sm:h-[520px]">
 
             <!-- CIELO -->
@@ -78,7 +49,7 @@
 
             <!-- CAMINO -->
 
-            <div class="absolute inset-x-0 bottom-0 z-30 h-[32%] overflow-hidden">
+            <div class="absolute inset-x-0 bottom-0 z-30 h-[77%] overflow-hidden">
                 <div class="paisaje paisaje-rapido">
                     <img src="/img/piupiu/camino.png" alt="" />
                     <img src="/img/piupiu/camino.png" alt="" />
@@ -165,9 +136,9 @@
     z-index: 10;
 
     width: 510px !important;
-    height: 510px !important;
+    height: 310px !important;
 
-    margin-top:25px;
+    margin-top:35px;
     margin-left:5px;
 
     object-fit: contain;
