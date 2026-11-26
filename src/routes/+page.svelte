@@ -40,14 +40,14 @@
     />
 </svelte:head>
 
-<main class="h-[610px] w-full box-border overflow-hidden bg-gradient-to-b from-sky-100 via-white to-purple-50 p-3">
-    <section class="mx-auto flex h-full max-w-5xl flex-col justify-center gap-4 p-34">
+<main class="h-full w-full box-border overflow-hidden bg-gradient-to-b from-sky-100 via-white to-purple-50 p-3">
+    <section class="mx-auto flex h-auto max-w-5xl flex-col justify-center gap-4 ">
         <header class="text-center">
             <h1 class="text-4xl sm:text-5xl font-black text-sky-700">
                 ¡Vamos a jugar!
             </h1>
 
-            <p class="mt-3 text-lg text-gray-500 font-medium">
+            <p class="text-lg text-gray-500 font-medium">
                 Elige tu juego favorito
             </p>
         </header>
@@ -56,7 +56,7 @@
             {#each juegos as juego}
     <a
         href={juego.ruta}
-        class={`group flex h-72 w-full max-w-72 items-center justify-center
+        class={`group flex h-64 w-full  items-center justify-center
         overflow-hidden rounded-3xl border-4 border-white
         sm:h-50
         ${juego.color}

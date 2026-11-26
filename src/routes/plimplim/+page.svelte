@@ -141,8 +141,8 @@ function reproducirCelebracion() {
     <title>Encuentra los personajes | Plim Plim</title>
 </svelte:head>
 
-<main class="h-[610px] w-full box-border overflow-hidden bg-gradient-to-b from-sky-200 via-white to-blue-300 p-3">
-    <section class="mx-auto flex h-full max-w-5xl flex-col gap-2">
+<main class="h-full w-full box-border overflow-hidden bg-gradient-to-b from-sky-200 via-white to-blue-300 p-3">
+    <section class="mx-auto flex h-auto max-w-5xl flex-col gap-2">
 
         <!-- PREGUNTA -->
         <div class="shrink-0 rounded-3xl bg-gray-200 p-3 text-center shadow-lg">
@@ -151,7 +151,7 @@ function reproducirCelebracion() {
                 ¡Vamos a jugar!
             </p>
 
-            <h1 class="text-2xl sm:text-3xl font-black text-sky-800">
+            <h1 class="text-xl  font-black text-sky-800">
                 ¿Dónde está
                 <span class="text-orange-500 capitalize">
                     {personajeObjetivo.nombre}
@@ -185,12 +185,12 @@ function reproducirCelebracion() {
                     {personaje.color}"
                 >
 
-                        <div class="flex  h-[90px] w-[90px] items-center justify-center">
+                        <div class="flex items-center justify-center">
 
                             <img
                                 src={`/img/plim/${personaje.nombre}.png`}
                                 alt={personaje.nombre}
-                                class="max-h-full max-w-full object-contain
+                                class="max-h-full h-24 max-w-full object-contain
                                 transition-transform duration-300
                                 group-hover:scale-110"
                             />
